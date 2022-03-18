@@ -25,20 +25,17 @@ public class ProductsServiceDBTest {
 
 	@MockBean
 	private ProductsRepo repo;
-
-	private List<Products> inputList;
-	private List<Products> returnList;
+	
 	private Products a1;
-	private Products a2;
+	private Optional<Products> a1o;
+
+	private List<Products> returnList;
 	private Products a1r;
 	private Products a2r;
-	Optional<Products> a1o;
-
+	
 	@BeforeEach
 	void setUp() {
 		a1 = new Products("Apple", "Fruits", 200, 1.75);
-		a2 = new Products("Grapes", "Fruits", 200, 2.50);
-		inputList = List.of(a1, a2);
 
 		a1r = new Products(1L, "Apple", "Fruits", 200, 1.75);
 		a2r = new Products(2L, "Grapes", "Fruits", 200, 2.50);
@@ -72,10 +69,14 @@ public class ProductsServiceDBTest {
 	@Test
 	void testUpdate() {
 		final Long id = 1L;
+		Products updated = new Products(id, this.a1.getName(), this.a1.getCategory(), this.a1.getQuantity(),
+				this.a1.getPrice());
+
 		Mockito.when(this.repo.findById(id)).thenReturn(a1o);
-		Mockito.when(this.repo.save(this.a2)).thenReturn(this.a2r);
-		assertThat(this.service.update(id, this.a2)).isEqualTo(this.a2r);
-		Mockito.verify(this.repo, Mockito.times(1)).save(this.a2);
+		Mockito.when(this.repo.save(updated)).thenReturn(updated);
+		assertThat(this.service.update(id, this.a1)).isEqualTo(updated);
+		Mockito.verify(this.repo, Mockito.times(1)).findById(id);
+		Mockito.verify(this.repo, Mockito.times(1)).save(updated);
 	}
 
 	@Test
@@ -96,7 +97,7 @@ public class ProductsServiceDBTest {
 		final Long id = 1L;
 		Mockito.when(this.repo.findById(id)).thenReturn(a1o);
 
-		assertThat(this.service.delete(id)).isEqualTo(a1r);
+		assertThat(this.service.remove(id)).isEqualTo(a1r);
 		Mockito.verify(this.repo, Mockito.times(1)).findById(id);
 		Mockito.verify(this.repo, Mockito.times(1)).deleteById(id);
 	}
