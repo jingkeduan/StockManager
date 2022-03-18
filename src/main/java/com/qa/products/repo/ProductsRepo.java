@@ -7,7 +7,5 @@ import com.qa.products.domain.Products;
 
 @Repository
 public interface ProductsRepo extends JpaRepository<Products,Long>{
-	
-	
 
 }

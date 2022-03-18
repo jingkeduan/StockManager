@@ -56,6 +56,6 @@ public class ProductsController{
 	public ResponseEntity<Products> remove(@PathParam("id") Long id) {
 		return new ResponseEntity<Products>(this.service.remove(id),HttpStatus.ACCEPTED);
 	}
-
 	
+
 }
