@@ -1,20 +1,20 @@
 package com.qa.products.service;
 
-
 import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 
 import com.qa.products.domain.Products;
 import com.qa.products.repo.ProductsRepo;
 
-
 @Service
 public class ProductsServiceDB implements ProductsInterface {
 
-private ProductsRepo repo;
-	
+	private ProductsRepo repo;
+
 	public ProductsServiceDB(ProductsRepo repo) {
 		super();
 		this.repo = repo;
@@ -33,7 +33,7 @@ private ProductsRepo repo;
 
 	@Override
 	public Products readById(Long id) {
-		return this.repo.findById(id).orElse(null);
+		return this.repo.findById(id).orElseThrow(EntityNotFoundException::new);
 	}
 
 	@Override
@@ -60,7 +60,8 @@ private ProductsRepo repo;
 				return false;
 			}
 		}
-		return true; //to indicate possibility of an object already been deleted before this operation
+		return true; // to indicate possibility of an object already been deleted before this
+						// operation
 
 	}
 
@@ -70,8 +71,6 @@ private ProductsRepo repo;
 		this.repo.deleteById(id);
 		return toDelete.orElse(null);
 	}
-
-
 
 
 }
